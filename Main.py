@@ -4,7 +4,7 @@ import DataBase
 import ButtonPressCreate
 import CommandStart
 import RemembrallSettings
-from telegram.ext import Updater, ConversationHandler, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 import time
 
 # logging.basicConfig(level=logging.DEBUG,
@@ -44,10 +44,27 @@ class Remembrall:
         ButtonPressCreate.send_subscribe(update, self.__database)
         return self.create_date(update, context)
 
-
     def create_date(self, update, context):
+        ButtonPressCreate.create_date_select(update, context)
+        return DATE
+
+    def create_date_enter_by_hand(self, update, context):
         ButtonPressCreate.create_date(update, context)
         return DATE
+
+    def create_date_today(self, update, context):
+        ButtonPressCreate.create_date_today(update, context, self.__database)
+        return self.create_time(update, context)
+
+    def create_date_calendar(self, update, context):
+        ButtonPressCreate.create_date_calendar(update, context)
+        return DATE
+
+    def change_calendar(self, update, context):
+        if not ButtonPressCreate.change_calendar(update, context):
+            return DATE
+        else:
+            return self.create_time(update, context)
 
     def check_date(self, update, context):
         if not ButtonPressCreate.check_user_date(update, context, self.__database):
@@ -86,6 +103,10 @@ class Remembrall:
                     MessageHandler(Filters.text, self.check_subscribe),
                 ],
                 DATE: [
+                    CallbackQueryHandler(self.create_date_enter_by_hand, pass_user_data=True, pattern='{}$'.format('ENTER')),
+                    CallbackQueryHandler(self.create_date_today, pass_user_data=True, pattern='{}$'.format('TODAY')),
+                    CallbackQueryHandler(self.create_date_calendar, pass_user_data=True, pattern='{}$'.format('SELECT')),
+                    CallbackQueryHandler(self.change_calendar),
                     MessageHandler(Filters.text, self.check_date)
                 ],
                 TIME: [

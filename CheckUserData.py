@@ -25,14 +25,14 @@ def check_date(text):
             raise Exception('Не верный формат ввода года')
         if len(check[2]) < 2:
             check[2] += '0'
-        year = int('20'+check[2])
+        year = int('20' + check[2])
         if day < 1 or month < 1 or year < 1:
             raise Exception('Неверный формат ввода даты')
 
         if month > 12:
             raise Exception('Неверный формат ввода месяца')
 
-        user_date = datetime.strptime(str(year)+str(month)+str(day), '%Y%m%d').date()
+        user_date = datetime.strptime(str(year) + str(month) + str(day), '%Y%m%d').date()
 
         now = datetime.now().date()
         if user_date < now:
@@ -93,3 +93,28 @@ def check_time(time_2):
         return 0, time
     except Exception as ex:
         return 1, str(ex)
+
+
+def create_today():
+    global save_date
+    save_date = datetime.now().date()
+    return save_date
+
+
+def check_calendar_date(calendar_date):
+    print('check_calendar_date')
+    calendar_date_ = str(calendar_date).split(' ')
+    print(calendar_date_)
+    calendar_date_ = calendar_date_[0].split('-')
+    print(calendar_date_)
+    now_date = datetime.strptime(calendar_date_[0]+calendar_date_[1]+calendar_date_[2], '%Y%m%d').date()
+    now = datetime.now().date()
+    print('now_date: ', now_date)
+    if now_date < now:
+        print("False")
+        return False
+    else:
+        print("True")
+        global save_date
+        save_date = now_date
+        return True
