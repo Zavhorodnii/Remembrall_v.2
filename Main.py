@@ -1,0 +1,103 @@
+import logging
+
+import DataBase
+import ButtonPressCreate
+import CommandStart
+import RemembrallSettings
+from telegram.ext import Updater, ConversationHandler, CommandHandler, MessageHandler, Filters
+import time
+
+# logging.basicConfig(level=logging.DEBUG,
+#                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+#
+# logger = logging.getLogger(__name__)
+# logger.setLevel(logging.INFO)
+
+TELEGRAM_HTTP_API_TOKEN = '942544876:AAE4GMGwrVxMPF6qftwXhn6dEfBiLvicAdY'
+
+CHOOSING, TITLE, SUBSCRIBE, DATE, TIME = range(5)
+
+
+class Remembrall:
+    def __init__(self):
+        self.__remembrall = None
+        self.__database = DataBase.DataBase()
+
+    def start(self, update, context):
+        CommandStart.start(update, context)
+        return CHOOSING
+
+    def create_title(self, update, context):
+        ButtonPressCreate.start_create(update, context)
+        return TITLE
+
+    def check_title(self, update, context):
+        ButtonPressCreate.send_title(update, self.__database)
+        return self.create_subscribe(update, context)
+
+
+    def create_subscribe(self, update, context):
+        ButtonPressCreate.create_subscribe(update, context)
+        return SUBSCRIBE
+
+    def check_subscribe(self, update, context):
+        ButtonPressCreate.send_subscribe(update, self.__database)
+        return self.create_date(update, context)
+
+
+    def create_date(self, update, context):
+        ButtonPressCreate.create_date(update, context)
+        return DATE
+
+    def check_date(self, update, context):
+        if not ButtonPressCreate.check_user_date(update, context, self.__database):
+            self.create_date(update, context)
+        else:
+            return self.create_time(update, context)
+
+
+    def create_time(self, update, context):
+        ButtonPressCreate.create_time(update, context)
+        return TIME
+
+    def check_time(self, update, context):
+        if not ButtonPressCreate.check_user_time(update, context, self.__database):
+            self.create_time(update, context)
+
+
+    def main(self, remembrall):
+        self.__remembrall = remembrall
+        updater = Updater(TELEGRAM_HTTP_API_TOKEN, use_context=True)
+        dispatcher = updater.dispatcher
+
+
+        control_handler = ConversationHandler(
+            entry_points=[CommandHandler('start', self.start),],
+            states={
+                CHOOSING: [
+                    MessageHandler(Filters.regex('^Создать напоминание$'), self.create_title),
+                ],
+                TITLE: [
+                    MessageHandler(Filters.text, self.check_title),
+                ],
+                SUBSCRIBE: [
+                    MessageHandler(Filters.text, self.check_subscribe),
+                ],
+                DATE: [
+                    MessageHandler(Filters.text, self.check_date)
+                ],
+                TIME: [
+                    MessageHandler(Filters.text, self.check_time)
+                ],
+            },
+            fallbacks=[],
+        )
+        dispatcher.add_handler(control_handler)
+        updater.start_polling()
+        updater.idle()
+
+
+if __name__ == '__main__':
+    # RemembrallSettings.first_settings_for_start_server()
+    remembrall = Remembrall()
+    remembrall.main(remembrall)
