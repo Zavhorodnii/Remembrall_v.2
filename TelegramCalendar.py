@@ -43,7 +43,7 @@ def create_calendar(year=None, month=None):
     for day in ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]:
         row.append(InlineKeyboardButton(day, callback_data=data_ignore))
     keyboard.append(row)
-    
+
     my_calendar = calendar.monthcalendar(year, month)
     print('my_calendar: ', my_calendar)
     for week in my_calendar:
