@@ -1,7 +1,7 @@
 from calendar import monthrange
 import re
 
-from future.backports.datetime import datetime
+from datetime import datetime
 
 save_date = None
 
@@ -20,23 +20,24 @@ def check_date(text):
 
         day = int(check[0])
         month = int(check[1])
-        year = int(check[2])
 
+        if len(check[2]) > 2:
+            raise Exception('Не верный формат ввода года')
+        if len(check[2]) < 2:
+            check[2] += '0'
+        year = int('20'+check[2])
         if day < 1 or month < 1 or year < 1:
             raise Exception('Неверный формат ввода даты')
 
         if month > 12:
             raise Exception('Неверный формат ввода месяца')
 
-        if len(check[2]) > 2:
-            raise Exception('Не верный формат ввода года')
-        if len(check[2]) < 2:
-            year *= 10
-        now = datetime.now()
-        if day < now.day and month <= now.month and year <= now.year:
+        user_date = datetime.strptime(str(year)+str(month)+str(day), '%Y%m%d').date()
+
+        now = datetime.now().date()
+        if user_date < now:
             raise Exception('День уже прошел')
-        new_year = int('20{}'.format(year))
-        day_end = monthrange(new_year, month)
+        day_end = monthrange(year, month)
         if day > day_end[1]:
             raise Exception('Неверный формат ввода дня')
         day_str = str(day)
@@ -48,7 +49,7 @@ def check_date(text):
 
         date = "{}.{}.{}".format(day_str, month_str, year)
         global save_date
-        save_date = date
+        save_date = user_date
         return 0, date
     except Exception as ex:
         return 1, str(ex)
@@ -74,11 +75,14 @@ def check_time(time_2):
             raise Exception('Неверный формат ввода часов')
         if minute < 0 or minute > 59:
             raise Exception('Неверный формат ввода минут')
+
+        user_time = datetime.strptime(str(hour) + ':' + str(minute) + ':' + '00', "%H:%M:%S").time()
+
+        now_time = datetime.now().time()
+        now_date = datetime.now().date()
         global save_date
-        date = save_date.split('.')
-        now = datetime.now()
-        if int(date[0]) == now.day and int(date[1]) == now.month and int('20{}'.format(date[2])) == now.year:
-            if hour <= now.hour and minute <= now.minute:
+        if save_date == now_date:
+            if user_time <= now_time:
                 raise Exception('Время прошло')
 
         if len(str(hour)) < 2:

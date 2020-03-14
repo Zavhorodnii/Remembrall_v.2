@@ -52,7 +52,7 @@ def check_user_date(update, context, database):
         return False
 
 
-def check_user_time(update,context, database):
+def check_user_time(update, context, database):
     result = CheckUserData.check_time(update.message.text)
     if result[0] == 0:
         global time
@@ -82,7 +82,8 @@ def send_subscribe(update, database):
 def send_date(user_id, database):
     global date
     dates = date.split('.')
-    date_ = '20{}-{}-{}'.format(dates[2], dates[1], dates[0])
+    date_ = '{}-{}-{}'.format(dates[2], dates[1], dates[0])
+    print('date: ', date_)
     database.send_date(user_id, date_)
 
 
@@ -91,7 +92,7 @@ def send_time(user_id, database):
     database.send_time(user_id, times)
 
 
-def successful_create_rem(update, context, database):
+def successful_create_rem(update, context):
     context.bot.send_message(
         update.effective_chat.id,
         text="Напоминание Появится {} в {}".format(date, time),

@@ -63,7 +63,9 @@ class Remembrall:
     def check_time(self, update, context):
         if not ButtonPressCreate.check_user_time(update, context, self.__database):
             self.create_time(update, context)
-
+        else:
+            ButtonPressCreate.successful_create_rem(update, context)
+            return CHOOSING
 
     def main(self, remembrall):
         self.__remembrall = remembrall
