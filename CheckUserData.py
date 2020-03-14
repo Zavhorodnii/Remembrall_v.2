@@ -105,16 +105,8 @@ def check_calendar_date(calendar_date):
     print('check_calendar_date')
     calendar_date_ = str(calendar_date).split(' ')
     print(calendar_date_)
+    global save_date
+    save_date = calendar_date_[0]
     calendar_date_ = calendar_date_[0].split('-')
     print(calendar_date_)
-    now_date = datetime.strptime(calendar_date_[0]+calendar_date_[1]+calendar_date_[2], '%Y%m%d').date()
-    now = datetime.now().date()
-    print('now_date: ', now_date)
-    if now_date < now:
-        print("False")
-        return False
-    else:
-        print("True")
-        global save_date
-        save_date = now_date
-        return True
+    return '{}.{}.{}'.format(calendar_date_[2], calendar_date_[1], calendar_date_[0])

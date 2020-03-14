@@ -44,13 +44,17 @@ def create_calendar(year=None, month=None):
         row.append(InlineKeyboardButton(day, callback_data=data_ignore))
     keyboard.append(row)
 
+    now_dey = now.day
     my_calendar = calendar.monthcalendar(year, month)
-    print('my_calendar: ', my_calendar)
     for week in my_calendar:
         row = []
         for day in week:
             if day == 0:
                 row.append(InlineKeyboardButton(" ", callback_data=data_ignore))
+            elif month < now.month:
+                row.append(InlineKeyboardButton(str(day), callback_data=data_ignore))
+            elif day < now_dey and month == now.month:
+                row.append(InlineKeyboardButton(str(day), callback_data=data_ignore))
             else:
                 row.append(InlineKeyboardButton(str(day), callback_data=create_callback_data("DAY", year, month, day)))
         keyboard.append(row)
@@ -78,10 +82,8 @@ def process_calendar_selection(bot, update):
     (action, year, month, day) = separate_callback_data(query.data)
     curr = datetime.datetime(int(year), int(month), 1)
     if action == "IGNORE":
-        print('IGNORE')
         bot.answer_callback_query(callback_query_id=query.id)
     elif action == "DAY":
-        print('DAY')
         bot.edit_message_text(text=query.message.text,
                               chat_id=query.message.chat_id,
                               message_id=query.message.message_id

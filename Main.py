@@ -45,7 +45,7 @@ class Remembrall:
         return self.create_date(update, context)
 
     def create_date(self, update, context):
-        ButtonPressCreate.create_date_select(update, context)
+        ButtonPressCreate.create_date_select(update)
         return DATE
 
     def create_date_enter_by_hand(self, update, context):
@@ -84,10 +84,13 @@ class Remembrall:
             ButtonPressCreate.successful_create_rem(update, context)
             return CHOOSING
 
+
+
     def main(self, remembrall):
         self.__remembrall = remembrall
         updater = Updater(TELEGRAM_HTTP_API_TOKEN, use_context=True)
         dispatcher = updater.dispatcher
+
 
 
         control_handler = ConversationHandler(

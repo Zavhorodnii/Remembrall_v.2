@@ -6,7 +6,7 @@ date = None
 time = None
 
 
-def create_date_select(update, context):
+def create_date_select(update):
     update.message.reply_text(
         "Когда должно быть выведено напоминание?\nВыбрать можно на сегодня или позже.",
         reply_markup=Buttons.buttons_to_create_date_remem()
@@ -62,16 +62,15 @@ def create_date_calendar(update, context):
 
 def change_calendar(update, context):
     try:
-        selected, date = TelegramCalendar.process_calendar_selection(context.bot, update)
-        # print('date: ', date)
-        # print('selected: ', selected)
+        selected, date_ = TelegramCalendar.process_calendar_selection(context.bot, update)
         if selected:
-            selected = CheckUserData.check_calendar_date(date)
+            global date
+            date = CheckUserData.check_calendar_date(date_)
 
         context.bot.edit_message_text(
             chat_id=update.callback_query.message.chat_id,
             message_id=update.callback_query.message.message_id,
-            text="Выбрана дата %s" % (date.strftime("%d.%m.%Y"))
+            text="Выбрана дата %s" % (date_.strftime("%d.%m.%Y"))
         )
         return True
     except Exception as exe:
