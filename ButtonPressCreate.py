@@ -38,7 +38,7 @@ def create_date(update, context):
 
 def create_date_today(update, context, database):
     dates = CheckUserData.create_today()
-    send_date(update.callback_query.message.from_user.id, database, dates)
+    send_date(update.callback_query.message.chat_id, database, dates)
     dates = str(dates).split('-')
     dates = '{}.{}.{}'.format(dates[2], dates[1], dates[0])
     global date
@@ -65,8 +65,6 @@ def change_calendar(update, context, datebase):
         if selected:
             global date
             date = CheckUserData.check_calendar_date(date_)
-
-
         context.bot.edit_message_text(
             chat_id=update.callback_query.message.chat_id,
             message_id=update.callback_query.message.message_id,
@@ -144,6 +142,6 @@ def send_time(user_id, database, times):
 def successful_create_rem(update, context):
     context.bot.send_message(
         update.effective_chat.id,
-        text="Напоминание Появится {} в {}".format(date, time),
+        text="Напоминание появится {} в {}".format(date, time),
         reply_markup=Buttons.main_button()
     )

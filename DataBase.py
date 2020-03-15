@@ -26,7 +26,7 @@ class DataBase:
         self.__create_db_table_message = "CREATE TABLE IF NOT EXISTS message(" \
                                          "IdMessage INT UNIQUE NOT NULL PRIMARY KEY," \
                                          "IdRemember INT NOT NULL," \
-                                         "FOREIGN KEY (IdRemember) REFERENCES remember(IdRemember))"
+                                         "FOREIGN KEY (IdRemember) REFERENCES remember(IdRemember) on delete cascade)"
         self.__add_title = "INSERT remember (IdUser, TitleRemember, StepCreate) VALUE (%s, %s, %s); "
         self.__last_rem = "select MAX(IdRemember) from remember where IdUser = %s; "
         self.__add_subscribe = "update remember set SubscribeRemember = %s, StepCreate = %s where IdRemember = %s;"
@@ -36,6 +36,14 @@ class DataBase:
                              "select MAX(IdRemember) from remember where IdUser = %s);"
         self.__last_date_remember = "select DateRemember from remember where IdRemember = (" \
                                     "select MAX(IdRemember) from remember where IdUser = %s);"
+        self.__select__oll_remember = "select IdRemember, TitleRemember, SubscribeRemember, DateRemember, " \
+                                      "TimeRemember from remember where IdUser=%s"
+        self.__add_id_reminder = "INSERT message (IdMessage, IdRemember)" \
+                                 "VALUES (%s, %s)"
+        self.__select_repeat_message = "select IdMessage from message where IdRemember = (select " \
+                                       "IdRemember from message where IdMessage = %s); "
+        self.__delete_reminder = "DELETE FROM remember WHERE IdRemember = (select IdRemember from " \
+                                 "message where IdMessage = %s)"
 
     def check_or_create_db(self):
         mydb = pymysql.connect(
@@ -99,3 +107,27 @@ class DataBase:
             __con.execute(self.__last_date_remember, user_id)
             last = __con.fetchone()
         return str(last[0])
+
+    def select_all_remember(self, user_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__select__oll_remember, user_id)
+            all = __con.fetchall()
+        return all
+
+    def add_id_reminder(self, message_id, reminder_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__add_id_reminder, (message_id, reminder_id))
+
+    def select_repeat_message(self, message_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__select_repeat_message, message_id)
+            all = __con.fetchall()
+        return all
+
+    def delete_reminder(self, message_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__delete_reminder, message_id)

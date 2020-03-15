@@ -25,3 +25,11 @@ def buttons_to_create_date_remem():
 
 def calendar():
     return TelegramCalendar.create_calendar()
+
+
+def button_control_mess():
+    __keyboard = [
+        [InlineKeyboardButton("Удалить", callback_data=str('DELETE')),
+         InlineKeyboardButton("Перенести", callback_data=str('MOVE'))]
+    ]
+    return InlineKeyboardMarkup(__keyboard)

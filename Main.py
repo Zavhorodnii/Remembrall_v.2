@@ -1,5 +1,7 @@
 import logging
 
+import ButtonPressDelete
+import ButtonPressShow
 import DataBase
 import ButtonPressCreate
 import CommandStart
@@ -31,10 +33,13 @@ class Remembrall:
         ButtonPressCreate.start_create(update, context)
         return TITLE
 
+    def show_remembral(self, update, context):
+        ButtonPressShow.show_remembral(update, context, self.__database)
+        return CHOOSING
+
     def check_title(self, update, context):
         ButtonPressCreate.send_title(update, self.__database)
         return self.create_subscribe(update, context)
-
 
     def create_subscribe(self, update, context):
         ButtonPressCreate.create_subscribe(update, context)
@@ -72,7 +77,6 @@ class Remembrall:
         else:
             return self.create_time(update, context)
 
-
     def create_time(self, update, context):
         ButtonPressCreate.create_time(update, context)
         return TIME
@@ -83,6 +87,12 @@ class Remembrall:
         else:
             ButtonPressCreate.successful_create_rem(update, context)
             return CHOOSING
+
+    def delete_reminder(self, update, context):
+        ButtonPressDelete.delete_reminder(update, context, self.__database)
+
+    def move_reminder(self, update, context):
+        pass
 
 
     def start_after_restart(self, update, context):
@@ -118,6 +128,10 @@ class Remembrall:
             states={
                 CHOOSING: [
                     MessageHandler(Filters.regex('^Создать напоминание$'), self.create_title),
+                    MessageHandler(Filters.regex('^Просмотр списка напоминаний$'), self.show_remembral),
+                    CallbackQueryHandler(self.delete_reminder, pass_user_data=True, pattern='{}$'.format('DELETE')),
+                    # CallbackQueryHandler(self.move_reminder, pass_user_data=True, pattern='{}$'.format('MOVE')),
+
                 ],
                 TITLE: [
                     MessageHandler(Filters.text, self.check_title),
