@@ -61,7 +61,7 @@ class Remembrall:
         return DATE
 
     def change_calendar(self, update, context):
-        if not ButtonPressCreate.change_calendar(update, context):
+        if not ButtonPressCreate.change_calendar(update, context, self.__database):
             return DATE
         else:
             return self.create_time(update, context)
@@ -85,6 +85,17 @@ class Remembrall:
             return CHOOSING
 
 
+    def start_after_restart(self, update, context):
+        print(update.message.text)
+        var = RemembrallSettings.step_create(update, self.__database)
+        if var[0] == 3:
+            return self.check_subscribe(update, context)
+        elif var[0] == 1:
+            return self.check_time(update, context)
+        else:
+            return self.start(update, context)
+
+
 
     def main(self, remembrall):
         self.__remembrall = remembrall
@@ -92,9 +103,18 @@ class Remembrall:
         dispatcher = updater.dispatcher
 
 
-
         control_handler = ConversationHandler(
-            entry_points=[CommandHandler('start', self.start),],
+            entry_points=[CommandHandler('start', self.start),
+                          MessageHandler(Filters.regex('^Создать напоминание$'), self.create_title),
+                          MessageHandler(Filters.text, self.start_after_restart),
+                          CallbackQueryHandler(self.create_date_enter_by_hand, pass_user_data=True,
+                                               pattern='{}$'.format('ENTER')),
+                          CallbackQueryHandler(self.create_date_today, pass_user_data=True,
+                                               pattern='{}$'.format('TODAY')),
+                          CallbackQueryHandler(self.create_date_calendar, pass_user_data=True,
+                                               pattern='{}$'.format('SELECT')),
+                          CallbackQueryHandler(self.change_calendar),
+                          ],
             states={
                 CHOOSING: [
                     MessageHandler(Filters.regex('^Создать напоминание$'), self.create_title),
@@ -118,6 +138,7 @@ class Remembrall:
             },
             fallbacks=[],
         )
+
         dispatcher.add_handler(control_handler)
         updater.start_polling()
         updater.idle()

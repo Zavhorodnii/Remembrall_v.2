@@ -32,7 +32,10 @@ class DataBase:
         self.__add_subscribe = "update remember set SubscribeRemember = %s, StepCreate = %s where IdRemember = %s;"
         self.__add_date = "update remember set DateRemember = %s, StepCreate = %s where IdRemember = %s;"
         self.__add_time = "update remember set TimeRemember = %s, StepCreate = %s where IdRemember = %s;"
-
+        self.__step_create = "select StepCreate from remember where IdRemember = (" \
+                             "select MAX(IdRemember) from remember where IdUser = %s);"
+        self.__last_date_remember = "select DateRemember from remember where IdRemember = (" \
+                                    "select MAX(IdRemember) from remember where IdUser = %s);"
 
     def check_or_create_db(self):
         mydb = pymysql.connect(
@@ -56,29 +59,43 @@ class DataBase:
             __cur.execute(self.__create_db_table_message)
             __cur.close()
 
-    def send_title(self, id_user, title):
+    def send_title(self, user_id, title):
         with self.__my_db_connector:
             __con = self.__my_db_connector.cursor()
-            __con.execute(self.__add_title, (id_user, title, '3'))
+            __con.execute(self.__add_title, (user_id, title, '3'))
 
-    def send_subscribe(self, id_user, subscribe):
-        print(id_user)
+    def send_subscribe(self, user_id, subscribe):
+        print(user_id)
         with self.__my_db_connector:
             __con = self.__my_db_connector.cursor()
-            __con.execute(self.__last_rem, id_user)
+            __con.execute(self.__last_rem, user_id)
             __id_mess = __con.fetchone()
             __con.execute(self.__add_subscribe, (subscribe, '2', __id_mess))
 
-    def send_date(self, id_user, datetime):
+    def send_date(self, user_id, datetime):
         with self.__my_db_connector:
             __con = self.__my_db_connector.cursor()
-            __con.execute(self.__last_rem, id_user)
+            __con.execute(self.__last_rem, user_id)
             __id_mess = __con.fetchone()
             __con.execute(self.__add_date, (datetime, '1', __id_mess))
 
-    def send_time(self, id_user, datetime):
+    def send_time(self, user_id, datetime):
         with self.__my_db_connector:
             __con = self.__my_db_connector.cursor()
-            __con.execute(self.__last_rem, id_user)
+            __con.execute(self.__last_rem, user_id)
             __id_mess = __con.fetchone()
             __con.execute(self.__add_time, (datetime, '0', __id_mess))
+
+    def step_create(self, user_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__step_create, user_id)
+            step = __con.fetchone()
+        return step
+
+    def last_date_remember(self, user_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__last_date_remember, user_id)
+            last = __con.fetchone()
+        return str(last[0])

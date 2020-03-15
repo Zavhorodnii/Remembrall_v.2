@@ -38,7 +38,6 @@ def create_date(update, context):
 
 def create_date_today(update, context, database):
     dates = CheckUserData.create_today()
-    print('dates: ', dates)
     send_date(update.callback_query.message.from_user.id, database, dates)
     dates = str(dates).split('-')
     dates = '{}.{}.{}'.format(dates[2], dates[1], dates[0])
@@ -60,18 +59,21 @@ def create_date_calendar(update, context):
     )
 
 
-def change_calendar(update, context):
+def change_calendar(update, context, datebase):
     try:
         selected, date_ = TelegramCalendar.process_calendar_selection(context.bot, update)
         if selected:
             global date
             date = CheckUserData.check_calendar_date(date_)
 
+
         context.bot.edit_message_text(
             chat_id=update.callback_query.message.chat_id,
             message_id=update.callback_query.message.message_id,
             text="Выбрана дата %s" % (date_.strftime("%d.%m.%Y"))
         )
+        date_ = str(date_).split(' ')
+        send_date(update.callback_query.message.chat_id, datebase, date_[0])
         return True
     except Exception as exe:
         return False
@@ -84,10 +86,8 @@ def create_time(update, context):
     )
 
 
-
 def check_user_date(update, context, database):
     result = CheckUserData.check_date(update.message.text)
-    print(result)
     if result[0] == 0:
         global date
         date = result[1]
@@ -103,6 +103,11 @@ def check_user_date(update, context, database):
 def check_user_time(update, context, database):
     result = CheckUserData.check_time(update.message.text)
     if result[0] == 0:
+        global date
+        if date is None:
+            date = database.last_date_remember(update.message.from_user.id)
+            dates = date.split('-')
+            date = '{}.{}.{}'.format(dates[2], dates[1], dates[0])
         global time
         time = result[1]
         times = '{}:00'.format(result[1])
