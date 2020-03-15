@@ -33,3 +33,13 @@ def button_control_mess():
          InlineKeyboardButton("Перенести", callback_data=str('MOVE'))]
     ]
     return InlineKeyboardMarkup(__keyboard)
+
+
+def transfer_remind():
+    __keyboard = [
+        [InlineKeyboardButton("Сегодня", callback_data=str('TODAY')),
+         InlineKeyboardButton("Выбрать", callback_data=str('SELECT')),
+         InlineKeyboardButton("Ввести", callback_data=str('ENTER'))],
+        [InlineKeyboardButton("Отмена", callback_data=str('CANCEL')), ]
+    ]
+    return InlineKeyboardMarkup(__keyboard)

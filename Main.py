@@ -2,6 +2,7 @@ import logging
 
 import ButtonPressDelete
 import ButtonPressShow
+import ButtonPressTransfer
 import DataBase
 import ButtonPressCreate
 import CommandStart
@@ -17,7 +18,7 @@ import time
 
 TELEGRAM_HTTP_API_TOKEN = '942544876:AAE4GMGwrVxMPF6qftwXhn6dEfBiLvicAdY'
 
-CHOOSING, TITLE, SUBSCRIBE, DATE, TIME = range(5)
+CHOOSING, TITLE, SUBSCRIBE, DATE, CHECK_DATE, TIME = range(6)
 
 
 class Remembrall:
@@ -55,7 +56,7 @@ class Remembrall:
 
     def create_date_enter_by_hand(self, update, context):
         ButtonPressCreate.create_date(update, context)
-        return DATE
+        return CHECK_DATE
 
     def create_date_today(self, update, context):
         ButtonPressCreate.create_date_today(update, context, self.__database)
@@ -90,13 +91,19 @@ class Remembrall:
 
     def delete_reminder(self, update, context):
         ButtonPressDelete.delete_reminder(update, context, self.__database)
+        return CHOOSING
 
     def move_reminder(self, update, context):
-        pass
+        ButtonPressTransfer.transfer_reminder(update, context, self.__database)
+        return DATE
 
+
+    def cancel_update_date(self, update, context):
+        ButtonPressTransfer.cancel_update_date(update, context, self.__database)
+        return CHOOSING
 
     def start_after_restart(self, update, context):
-        print(update.message.text)
+        # print(update.message.text)
         var = RemembrallSettings.step_create(update, self.__database)
         if var[0] == 3:
             return self.check_subscribe(update, context)
@@ -116,13 +123,21 @@ class Remembrall:
         control_handler = ConversationHandler(
             entry_points=[CommandHandler('start', self.start),
                           MessageHandler(Filters.regex('^Создать напоминание$'), self.create_title),
-                          MessageHandler(Filters.text, self.start_after_restart),
+                          MessageHandler(Filters.regex('^Просмотр списка напоминаний$'), self.show_remembral),
                           CallbackQueryHandler(self.create_date_enter_by_hand, pass_user_data=True,
                                                pattern='{}$'.format('ENTER')),
                           CallbackQueryHandler(self.create_date_today, pass_user_data=True,
                                                pattern='{}$'.format('TODAY')),
                           CallbackQueryHandler(self.create_date_calendar, pass_user_data=True,
                                                pattern='{}$'.format('SELECT')),
+                          CallbackQueryHandler(self.delete_reminder, pass_user_data=True,
+                                               pattern='{}$'.format('DELETE')),
+                          CallbackQueryHandler(self.cancel_update_date, pass_user_data=True,
+                                               pattern='{}$'.format('CANCEL')),
+
+                          CallbackQueryHandler(self.move_reminder, pass_user_data=True, pattern='{}$'.format('MOVE')),
+
+                          MessageHandler(Filters.text, self.start_after_restart),
                           CallbackQueryHandler(self.change_calendar),
                           ],
             states={
@@ -130,7 +145,7 @@ class Remembrall:
                     MessageHandler(Filters.regex('^Создать напоминание$'), self.create_title),
                     MessageHandler(Filters.regex('^Просмотр списка напоминаний$'), self.show_remembral),
                     CallbackQueryHandler(self.delete_reminder, pass_user_data=True, pattern='{}$'.format('DELETE')),
-                    # CallbackQueryHandler(self.move_reminder, pass_user_data=True, pattern='{}$'.format('MOVE')),
+                    CallbackQueryHandler(self.move_reminder, pass_user_data=True, pattern='{}$'.format('MOVE')),
 
                 ],
                 TITLE: [
@@ -143,7 +158,10 @@ class Remembrall:
                     CallbackQueryHandler(self.create_date_enter_by_hand, pass_user_data=True, pattern='{}$'.format('ENTER')),
                     CallbackQueryHandler(self.create_date_today, pass_user_data=True, pattern='{}$'.format('TODAY')),
                     CallbackQueryHandler(self.create_date_calendar, pass_user_data=True, pattern='{}$'.format('SELECT')),
+                    CallbackQueryHandler(self.cancel_update_date, pass_user_data=True, pattern='{}$'.format('CANCEL')),
                     CallbackQueryHandler(self.change_calendar),
+                ],
+                CHECK_DATE: [
                     MessageHandler(Filters.text, self.check_date)
                 ],
                 TIME: [

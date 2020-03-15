@@ -132,11 +132,20 @@ def send_subscribe(update, database):
 
 
 def send_date(user_id, database, dates):
-    database.send_date(user_id, dates)
+    editing = database.check_editing_reminder(user_id)
+    if editing == 0:
+        database.send_date(user_id, dates)
+    else:
+        database.send_date_after_transfer(user_id, dates)
 
 
 def send_time(user_id, database, times):
-    database.send_time(user_id, times)
+    editing = database.check_editing_reminder(user_id)
+    if editing == 0:
+        database.send_time(user_id, times)
+    else:
+        database.send_time_after_transfer(user_id, times)
+        database.finish_editing_reminder(user_id)
 
 
 def successful_create_rem(update, context):

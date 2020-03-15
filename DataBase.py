@@ -22,9 +22,12 @@ class DataBase:
                                           "SubscribeRemember TEXT," \
                                           "DateRemember DATE," \
                                           "TimeRemember TIME," \
-                                          "StepCreate INT)"
+                                          "StepCreate INT," \
+                                          "Editing bool default false )"
         self.__create_db_table_message = "CREATE TABLE IF NOT EXISTS message(" \
-                                         "IdMessage INT UNIQUE NOT NULL PRIMARY KEY," \
+                                         "Id INT AUTO_INCREMENT PRIMARY KEY," \
+                                         "IdUser INT," \
+                                         "IdMessage INT NOT NULL ," \
                                          "IdRemember INT NOT NULL," \
                                          "FOREIGN KEY (IdRemember) REFERENCES remember(IdRemember) on delete cascade)"
         self.__add_title = "INSERT remember (IdUser, TitleRemember, StepCreate) VALUE (%s, %s, %s); "
@@ -38,12 +41,20 @@ class DataBase:
                                     "select MAX(IdRemember) from remember where IdUser = %s);"
         self.__select__oll_remember = "select IdRemember, TitleRemember, SubscribeRemember, DateRemember, " \
                                       "TimeRemember from remember where IdUser=%s"
-        self.__add_id_reminder = "INSERT message (IdMessage, IdRemember)" \
-                                 "VALUES (%s, %s)"
+        self.__add_id_reminder = "INSERT message (IdUser, IdMessage, IdRemember)" \
+                                 "VALUES (%s, %s, %s)"
         self.__select_repeat_message = "select IdMessage from message where IdRemember = (select " \
-                                       "IdRemember from message where IdMessage = %s); "
+                                       "IdRemember from message where IdUser = %s and IdMessage = %s); "
         self.__delete_reminder = "DELETE FROM remember WHERE IdRemember = (select IdRemember from " \
-                                 "message where IdMessage = %s)"
+                                 "message where IdUser = %s and IdMessage = %s)"
+        self.__select_one_reminder = "select IdRemember, TitleRemember, SubscribeRemember, DateRemember, TimeRemember " \
+                                     "from remember where IdRemember = (select IdRemember from message where " \
+                                     "IdUser = %s and IdMessage = %s );"
+        self.__start_editing_reminder = "update remember set Editing = true where IdRemember = (select IdRemember " \
+                                        "from message where IdUser = %s and IdMessage = %s );"
+        self.__finish_editing_reminder = "update remember set Editing = false where IdRemember = %s;"
+        self.__check_editing_reminder = "select count(true) from remember where IdUser = %s and Editing = true;"
+        self.__transfer_reminder = "select IdRemember from remember where IdUser = %s and Editing = true;"
 
     def check_or_create_db(self):
         mydb = pymysql.connect(
@@ -115,19 +126,60 @@ class DataBase:
             all = __con.fetchall()
         return all
 
-    def add_id_reminder(self, message_id, reminder_id):
+    def add_id_reminder(self, user_id, message_id, reminder_id):
         with self.__my_db_connector:
             __con = self.__my_db_connector.cursor()
-            __con.execute(self.__add_id_reminder, (message_id, reminder_id))
+            __con.execute(self.__add_id_reminder, (user_id, message_id, reminder_id))
 
-    def select_repeat_message(self, message_id):
+    def select_repeat_message(self, user_id, message_id):
         with self.__my_db_connector:
             __con = self.__my_db_connector.cursor()
-            __con.execute(self.__select_repeat_message, message_id)
+            __con.execute(self.__select_repeat_message, (user_id, message_id))
             all = __con.fetchall()
         return all
 
-    def delete_reminder(self, message_id):
+    def delete_reminder(self, user_id, message_id):
         with self.__my_db_connector:
             __con = self.__my_db_connector.cursor()
-            __con.execute(self.__delete_reminder, message_id)
+            __con.execute(self.__delete_reminder, (user_id, message_id))
+
+    def select_one_reminder(self, user_id, message_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__select_one_reminder, (user_id, message_id))
+            one = __con.fetchone()
+        return one
+
+    def start_editing_reminder(self, user_id, message_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__start_editing_reminder, (user_id, message_id))
+
+    def finish_editing_reminder(self, user_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__transfer_reminder, user_id)
+            __id_reminder = __con.fetchone()
+            print('__id_mess ', __id_reminder)
+            __con.execute(self.__finish_editing_reminder,  __id_reminder)
+
+    def check_editing_reminder(self, user_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__check_editing_reminder, user_id)
+            editing = __con.fetchone()
+        return editing[0]
+
+    def send_date_after_transfer(self, user_id, date):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__transfer_reminder, user_id)
+            __id_reminder = __con.fetchone()
+            __con.execute(self.__add_date, (date, '1', __id_reminder))
+
+    def send_time_after_transfer(self, user_id, time):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__transfer_reminder, user_id)
+            __id_reminder = __con.fetchone()
+            __con.execute(self.__add_time, (time, '0', __id_reminder))

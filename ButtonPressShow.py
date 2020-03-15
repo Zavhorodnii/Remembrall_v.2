@@ -13,6 +13,6 @@ def show_remembral(update, context, database):
                 text="{}\n{}\n{}\nДата {}\nВремя {}".format(remember[0], remember[1], remember[2], remember[3], remember[4]),
                 reply_markup=Buttons.button_control_mess()
             )
-            database.add_id_reminder(call_reminder.message_id, remember[0])
+            database.add_id_reminder(update.effective_chat.id, call_reminder.message_id, remember[0])
         except Exception as exe:
             sleep(5)
