@@ -5,12 +5,18 @@ import Buttons
 
 def show_remembral(update, context, database):
     all_remember = database.select_all_remember(update.message.from_user.id)
-    print(len(all_remember))
+    if len(all_remember) == 0:
+        context.bot.send_message(
+            update.effective_chat.id,
+            text="У вас нету напоминаний",
+        )
     for remember in all_remember:
         try:
+            correct_date = str(remember[3]).split('-')
             call_reminder = context.bot.send_message(
                 update.effective_chat.id,
-                text="{}\n{}\n{}\nДата {}\nВремя {}".format(remember[0], remember[1], remember[2], remember[3], remember[4]),
+                text="{}\n{}\nДата {}.{}.{}\nВремя {}".format(remember[1], remember[2], correct_date[2], correct_date[1],
+                                                              correct_date[0], remember[4]),
                 reply_markup=Buttons.button_control_mess()
             )
             database.add_id_reminder(update.effective_chat.id, call_reminder.message_id, remember[0])

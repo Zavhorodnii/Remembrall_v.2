@@ -47,6 +47,7 @@ class DataBase:
                                        "IdRemember from message where IdUser = %s and IdMessage = %s); "
         self.__delete_reminder = "DELETE FROM remember WHERE IdRemember = (select IdRemember from " \
                                  "message where IdUser = %s and IdMessage = %s)"
+        self.__select_one_reminder_before_delete = "select IdRemember from message where IdUser = %s and IdMessage = %s;"
         self.__select_one_reminder = "select IdRemember, TitleRemember, SubscribeRemember, DateRemember, " \
                                      "TimeRemember from remember where IdRemember = (select IdRemember " \
                                      "from message where IdUser = %s and IdMessage = %s );"
@@ -62,6 +63,14 @@ class DataBase:
                                                         "IdRemember = %s"
         self.__select_last_repeat_message_with_id_reminder = "select max(IdMessage) from message where IdUser = %s " \
                                                              "and IdRemember = %s; "
+        self.__select_last_remember = "select IdRemember, TitleRemember, SubscribeRemember, DateRemember, " \
+                                       "TimeRemember from remember where IdRemember = (select MAX(IdRemember) from " \
+                                       "remember where IdUser = %s and StepCreate = %s);"
+        self.__select_all_reminder_where_step_create_equal_zero = "select IdRemember, IdUser, TitleRemember, " \
+                                                                  "SubscribeRemember, DateRemember, " \
+                                                                  "TimeRemember from remember where StepCreate = %s;"
+        self.__allow_transfer_reminder = "select count(*) from remember where IdUser = %s and StepCreate > %s " \
+                                         "or IdUser = %s and Editing = True; "
 
     def check_or_create_db(self):
         mydb = pymysql.connect(
@@ -150,6 +159,13 @@ class DataBase:
             __con = self.__my_db_connector.cursor()
             __con.execute(self.__delete_reminder, (user_id, message_id))
 
+    def elect_one_reminder_before_delete(self, user_id, message_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__select_one_reminder_before_delete, (user_id, message_id))
+            one = __con.fetchone()
+        return one
+
     def select_one_reminder(self, user_id, message_id):
         with self.__my_db_connector:
             __con = self.__my_db_connector.cursor()
@@ -211,4 +227,25 @@ class DataBase:
             __con.execute(self.__select_last_repeat_message_with_id_reminder, (user_id, __id_reminder))
             one = __con.fetchone()
         return one
+
+    def select_last_remember(self, user_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__select_last_remember, (user_id, '0'))
+            one = __con.fetchone()
+        return one
+
+    def select_all_reminder_where_step_create_equal_zero(self):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__select_all_reminder_where_step_create_equal_zero, '0')
+            all = __con.fetchall()
+        return all
+
+
+    def allow_transfer_reminder(self, user_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__allow_transfer_reminder, (user_id, '0', user_id))
+            return __con.fetchone()
 

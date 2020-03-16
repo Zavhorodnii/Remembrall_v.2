@@ -15,6 +15,7 @@ import time
 #
 # logger = logging.getLogger(__name__)
 # logger.setLevel(logging.INFO)
+import Threads
 
 TELEGRAM_HTTP_API_TOKEN = '942544876:AAE4GMGwrVxMPF6qftwXhn6dEfBiLvicAdY'
 
@@ -36,11 +37,8 @@ class Remembrall:
         return TITLE
 
     def show_remembral(self, update, context):
-        print('00')
         ButtonPressTransfer.cancel_update_date(update, context, self.__database)
-        print('11')
         ButtonPressShow.show_remembral(update, context, self.__database)
-        print('22')
         return CHOOSING
 
     def check_title(self, update, context):
@@ -79,7 +77,7 @@ class Remembrall:
 
     def check_date(self, update, context):
         if not ButtonPressCreate.check_user_date(update, context, self.__database):
-            self.create_date(update, context)
+            return self.create_date(update, context)
         else:
             return self.create_time(update, context)
 
@@ -108,7 +106,6 @@ class Remembrall:
         return CHOOSING
 
     def start_after_restart(self, update, context):
-        # print(update.message.text)
         var = RemembrallSettings.step_create(update, self.__database)
         if var[0] == 3:
             return self.check_subscribe(update, context)
@@ -121,6 +118,9 @@ class Remembrall:
         self.__remembrall = remembrall
         updater = Updater(TELEGRAM_HTTP_API_TOKEN, use_context=True)
         dispatcher = updater.dispatcher
+
+
+        Threads.add_datetime_for_dict_remind_after_restart(self.__database, updater)
 
 
         control_handler = ConversationHandler(

@@ -75,13 +75,14 @@ def check_time(time_2):
             raise Exception('Неверный формат ввода часов')
         if minute < 0 or minute > 59:
             raise Exception('Неверный формат ввода минут')
-
+        global save_date
         user_time = datetime.strptime(str(hour) + ':' + str(minute) + ':' + '00', "%H:%M:%S").time()
+        user_date = datetime.strptime(str(save_date), '%Y-%m-%d').date()
 
         now_time = datetime.now().time()
         now_date = datetime.now().date()
-        global save_date
-        if save_date == now_date:
+
+        if user_date == now_date:
             if user_time <= now_time:
                 raise Exception('Время прошло')
 

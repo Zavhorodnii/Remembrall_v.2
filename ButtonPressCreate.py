@@ -2,6 +2,7 @@ import ButtonPressTransfer
 import Buttons
 import CheckUserData
 import TelegramCalendar
+import Threads
 
 date = None
 time = None
@@ -149,6 +150,7 @@ def send_time(user_id, database, times):
     editing = database.check_editing_reminder(user_id)
     if editing == 0:
         database.send_time(user_id, times)
+        Threads.add_datetime_for_dict_remind(database, user_id)
     else:
         database.send_time_after_transfer(user_id, times)
         global update_rem, context_rem
