@@ -153,7 +153,6 @@ def send_time(user_id, database, times):
         database.send_time_after_transfer(user_id, times)
         global update_rem, context_rem
         ButtonPressTransfer.update_reminder_message(update_rem, context_rem, database, user_id)
-        # database.finish_editing_reminder(user_id)
 
 
 def successful_create_rem(update, context):

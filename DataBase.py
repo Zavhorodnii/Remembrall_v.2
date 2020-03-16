@@ -47,19 +47,21 @@ class DataBase:
                                        "IdRemember from message where IdUser = %s and IdMessage = %s); "
         self.__delete_reminder = "DELETE FROM remember WHERE IdRemember = (select IdRemember from " \
                                  "message where IdUser = %s and IdMessage = %s)"
-        self.__select_one_reminder = "select IdRemember, TitleRemember, SubscribeRemember, DateRemember, TimeRemember " \
-                                     "from remember where IdRemember = (select IdRemember from message where " \
-                                     "IdUser = %s and IdMessage = %s );"
+        self.__select_one_reminder = "select IdRemember, TitleRemember, SubscribeRemember, DateRemember, " \
+                                     "TimeRemember from remember where IdRemember = (select IdRemember " \
+                                     "from message where IdUser = %s and IdMessage = %s );"
         self.__start_editing_reminder = "update remember set Editing = true where IdRemember = (select IdRemember " \
                                         "from message where IdUser = %s and IdMessage = %s );"
         self.__finish_editing_reminder = "update remember set Editing = false where IdRemember = %s;"
         self.__check_editing_reminder = "select count(true) from remember where IdUser = %s and Editing = true;"
         self.__transfer_reminder = "select IdRemember from remember where IdUser = %s and Editing = true;"
-        self.__select_one_reminder_where_editing_equal_true = "select IdRemember, TitleRemember, SubscribeRemember, " \
+        self.__select_one_reminder_where_editing_equal_true = "select IdRemember, IdUser, TitleRemember, SubscribeRemember, " \
                                                               "DateRemember, TimeRemember from remember where IdUser = " \
                                                               "%s and Editing = true"
         self.__select_repeat_message_with_id_remember = "select IdMessage from message where IdUser = %s and " \
                                                         "IdRemember = %s"
+        self.__select_last_repeat_message_with_id_reminder = "select max(IdMessage) from message where IdUser = %s " \
+                                                             "and IdRemember = %s; "
 
     def check_or_create_db(self):
         mydb = pymysql.connect(
@@ -202,3 +204,11 @@ class DataBase:
             __con.execute(self.__select_repeat_message_with_id_remember, (user_id, __id_reminder))
             all = __con.fetchall()
         return all
+
+    def select_last_repeat_message_with_id_reminder(self, user_id, __id_reminder):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__select_last_repeat_message_with_id_reminder, (user_id, __id_reminder))
+            one = __con.fetchone()
+        return one
+

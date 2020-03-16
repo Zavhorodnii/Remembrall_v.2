@@ -31,11 +31,16 @@ class Remembrall:
         return CHOOSING
 
     def create_title(self, update, context):
+        ButtonPressTransfer.cancel_update_date(update, context, self.__database)
         ButtonPressCreate.start_create(update, context)
         return TITLE
 
     def show_remembral(self, update, context):
+        print('00')
+        ButtonPressTransfer.cancel_update_date(update, context, self.__database)
+        print('11')
         ButtonPressShow.show_remembral(update, context, self.__database)
+        print('22')
         return CHOOSING
 
     def check_title(self, update, context):
@@ -109,8 +114,6 @@ class Remembrall:
             return self.check_subscribe(update, context)
         elif var[0] == 1:
             return self.check_time(update, context)
-        else:
-            return self.start(update, context)
 
 
 
