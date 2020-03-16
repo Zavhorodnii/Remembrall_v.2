@@ -1,9 +1,12 @@
+import ButtonPressTransfer
 import Buttons
 import CheckUserData
 import TelegramCalendar
 
 date = None
 time = None
+update_rem = None
+context_rem = None
 
 
 def create_date_select(update):
@@ -109,6 +112,9 @@ def check_user_time(update, context, database):
         global time
         time = result[1]
         times = '{}:00'.format(result[1])
+        global update_rem, context_rem
+        update_rem = update
+        context_rem = context
         send_time(update.message.from_user.id, database, times)
         return True
     else:
@@ -145,7 +151,9 @@ def send_time(user_id, database, times):
         database.send_time(user_id, times)
     else:
         database.send_time_after_transfer(user_id, times)
-        database.finish_editing_reminder(user_id)
+        global update_rem, context_rem
+        ButtonPressTransfer.update_reminder_message(update_rem, context_rem, database, user_id)
+        # database.finish_editing_reminder(user_id)
 
 
 def successful_create_rem(update, context):

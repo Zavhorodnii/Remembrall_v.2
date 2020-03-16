@@ -102,11 +102,8 @@ def create_today():
 
 
 def check_calendar_date(calendar_date):
-    print('check_calendar_date')
     calendar_date_ = str(calendar_date).split(' ')
-    print(calendar_date_)
     global save_date
     save_date = calendar_date_[0]
     calendar_date_ = calendar_date_[0].split('-')
-    print(calendar_date_)
     return '{}.{}.{}'.format(calendar_date_[2], calendar_date_[1], calendar_date_[0])

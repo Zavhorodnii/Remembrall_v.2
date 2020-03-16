@@ -39,7 +39,7 @@ class DataBase:
                              "select MAX(IdRemember) from remember where IdUser = %s);"
         self.__last_date_remember = "select DateRemember from remember where IdRemember = (" \
                                     "select MAX(IdRemember) from remember where IdUser = %s);"
-        self.__select__oll_remember = "select IdRemember, TitleRemember, SubscribeRemember, DateRemember, " \
+        self.__select__all_remember = "select IdRemember, TitleRemember, SubscribeRemember, DateRemember, " \
                                       "TimeRemember from remember where IdUser=%s"
         self.__add_id_reminder = "INSERT message (IdUser, IdMessage, IdRemember)" \
                                  "VALUES (%s, %s, %s)"
@@ -55,6 +55,11 @@ class DataBase:
         self.__finish_editing_reminder = "update remember set Editing = false where IdRemember = %s;"
         self.__check_editing_reminder = "select count(true) from remember where IdUser = %s and Editing = true;"
         self.__transfer_reminder = "select IdRemember from remember where IdUser = %s and Editing = true;"
+        self.__select_one_reminder_where_editing_equal_true = "select IdRemember, TitleRemember, SubscribeRemember, " \
+                                                              "DateRemember, TimeRemember from remember where IdUser = " \
+                                                              "%s and Editing = true"
+        self.__select_repeat_message_with_id_remember = "select IdMessage from message where IdUser = %s and " \
+                                                        "IdRemember = %s"
 
     def check_or_create_db(self):
         mydb = pymysql.connect(
@@ -122,7 +127,7 @@ class DataBase:
     def select_all_remember(self, user_id):
         with self.__my_db_connector:
             __con = self.__my_db_connector.cursor()
-            __con.execute(self.__select__oll_remember, user_id)
+            __con.execute(self.__select__all_remember, user_id)
             all = __con.fetchall()
         return all
 
@@ -183,3 +188,17 @@ class DataBase:
             __con.execute(self.__transfer_reminder, user_id)
             __id_reminder = __con.fetchone()
             __con.execute(self.__add_time, (time, '0', __id_reminder))
+
+    def select_one_reminder_where_editing_equal_true(self, user_id):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__select_one_reminder_where_editing_equal_true, user_id)
+            one = __con.fetchone()
+        return one
+
+    def select_repeat_message_with_id_remember(self, user_id, __id_reminder):
+        with self.__my_db_connector:
+            __con = self.__my_db_connector.cursor()
+            __con.execute(self.__select_repeat_message_with_id_remember, (user_id, __id_reminder))
+            all = __con.fetchall()
+        return all
