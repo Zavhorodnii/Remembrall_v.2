@@ -7,4 +7,4 @@ def first_settings_for_start_server():
 
 
 def step_create(update, database):
-    return database.step_create(update.message.from_user.id)
+    return database.step_create(update.message.from_user.id )
