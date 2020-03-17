@@ -8,7 +8,7 @@ import ButtonPressCreate
 import CommandStart
 import RemembrallSettings
 from telegram.ext import Updater, ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-import time
+
 
 # logging.basicConfig(level=logging.DEBUG,
 #                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -100,7 +100,6 @@ class Remembrall:
         ButtonPressTransfer.transfer_reminder(update, context, self.__database)
         return DATE
 
-
     def cancel_update_date(self, update, context):
         ButtonPressTransfer.cancel_update_date(update, context, self.__database)
         return CHOOSING
@@ -111,8 +110,6 @@ class Remembrall:
             return self.check_subscribe(update, context)
         elif var[0] == 1:
             return self.check_time(update, context)
-
-
 
     def main(self, remembrall):
         self.__remembrall = remembrall

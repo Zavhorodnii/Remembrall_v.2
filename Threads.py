@@ -17,6 +17,7 @@ def add_datetime_for_dict_remind_after_restart(database, updater_):
         dict_reminder[i[0]] = (i[1], "{} {}".format(i[4], i[5]))
         start_thread(i[0], i[1], i[2], i[3], database)
         sleep(0.1)
+    print('dict_reminder ', dict_reminder)
 
 
 def del_reminder_from_dict_reminder(message_id):

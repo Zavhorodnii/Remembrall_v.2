@@ -8,9 +8,11 @@ save_date = None
 
 def check_date(text):
     try:
-        text_2 = re.sub(r'\s+', '', text)
-        text_2.strip()
-        check = text_2.split('.')
+        check = list()
+        buff = re.split(r'(\d{,2})\D+', text)
+        for i in buff:
+            if i != '':
+                check.append(i)
         len_2 = len(check)
         if len_2 < 3 or len_2 > 3:
             raise Exception('Неверный формат ввода даты')
@@ -57,10 +59,11 @@ def check_date(text):
 
 def check_time(time_2):
     try:
-        time = str(time_2)
-        text_2 = re.sub(r'\s+', '', time)
-        text_2.strip()
-        check = text_2.split(':')
+        check = list()
+        buff = re.split(r'(\d{,2})\D+', time_2)
+        for i in buff:
+            if i != '':
+                check.append(i)
         if len(check) < 2 or len(check) > 2:
             raise Exception("Неверный формат ввода времени")
         if not check[0].isdigit() and not check[0].isdigit():
