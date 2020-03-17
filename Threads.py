@@ -11,27 +11,39 @@ class Threads:
         self.__dict_reminder = dict()
         self.__updater = None
 
-        self.__start_send_reminder = False
+        self.__start_send_reminder = dict()
 
 
     def add_datetime_for_dict_remind_after_restart(self, updater_):
-        self.__updater = updater_
-        all_reminder = self.__database.select_all_reminder_where_step_create_equal_zero()
-        for i in all_reminder:
-            self.__dict_reminder[i[0]] = (i[1], "{} {}".format(i[4], i[5]))
-            self.start_thread(i[0], i[1], i[2], i[3])
-            sleep(0.1)
-        print('dict_reminder ', self.__dict_reminder)
+        try:
+            thread = Thread(target=self.check_reminder)
+            thread.start()
+            self.__updater = updater_
+            all_reminder = self.__database.select_all_reminder_where_step_create_equal_zero()
+            for i in all_reminder:
+                self.__dict_reminder[i[0]] = (i[1], "{} {}".format(i[4], i[5]))
+                if i[1] not in self.__start_send_reminder:
+                    self.__start_send_reminder[i[1]] = False
+                self.start_thread(i[0], i[1], i[2], i[3])
+                sleep(0.1)
+        except Exception as exe:
+            pass
 
     def check_reminder(self):
         while True:
-            time = self.__database.allow_transfer_reminder()
-            if time[0] != 0:
-                sleep(15)
-                continue
+            for key in self.__start_send_reminder:
+                time = self.__database.allow_transfer_reminder(key)
+                if time[0] != 0:
+                    self.__start_send_reminder[key] = False
+                else:
+                    self.__start_send_reminder[key] = True
+            sleep(10)
+
 
 
     def del_reminder_from_dict_reminder(self, message_id):
+        if message_id not in self.__dict_reminder:
+            return
         del self.__dict_reminder[message_id[0]]
 
 
@@ -40,6 +52,8 @@ class Threads:
         if message is None: #create
             message = self.__database.select_last_remember(user_id)
             self.__dict_reminder[message[0]] = (user_id, "{} {}".format(message[3], message[4]))
+            if user_id not in self.__start_send_reminder:
+                self.__start_send_reminder[user_id] = False
             self.start_thread(message[0], user_id, message[1], message[2])
         else:
             self.__dict_reminder[message[0]] = (user_id, "{} {}".format(message[4], message[5]))
@@ -54,8 +68,7 @@ class Threads:
         while True:
             if message_id not in self.__dict_reminder:
                 break
-            time = self.__database.allow_transfer_reminder(user_id)
-            if time[0] != 0:
+            if not self.__start_send_reminder[user_id]:
                 sleep(15)
                 continue
             date = datetime.strptime(self.__dict_reminder[message_id][1], "%Y-%m-%d %H:%M:%S")
@@ -71,4 +84,4 @@ class Threads:
                 self.__database.add_id_reminder(user_id, call_reminder.message_id, message_id)
                 sleep(300)
             else:
-                sleep(30)
+                sleep(10)

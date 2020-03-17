@@ -9,14 +9,14 @@ import ButtonPressCreate
 import CommandStart
 import RemembrallSettings
 from telegram.ext import Updater, ConversationHandler, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-
-
-# logging.basicConfig(level=logging.DEBUG,
-#                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-#
-# logger = logging.getLogger(__name__)
-# logger.setLevel(logging.INFO)
 import Threads
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 
 TELEGRAM_HTTP_API_TOKEN = '942544876:AAE4GMGwrVxMPF6qftwXhn6dEfBiLvicAdY'
 
@@ -24,9 +24,10 @@ CHOOSING, TITLE, SUBSCRIBE, DATE, CHECK_DATE, TIME = range(6)
 
 
 class Remembrall:
-    def __init__(self):
+    def __init__(self, database, remembral_settings):
         self.__buttons = Buttons.Buttons()
-        self.__database = DataBase.DataBase()
+        self.__database = database
+        self.__remembral_settings = remembral_settings
         self.__threads = Threads.Threads(self.__database, self.__buttons)
         self.__commandStart = CommandStart.CommandStart(self.__database, self.__buttons)
         self.__buttonPressShow = ButtonPressShow.ButtonPressShow(self.__database, self.__buttons)
@@ -36,8 +37,6 @@ class Remembrall:
         self.__remembrall = None
 
     def start(self, update, context):
-        remembrall = Remembrall()
-        remembrall.start
         self.__commandStart.start(update, context)
         return CHOOSING
 
@@ -115,7 +114,7 @@ class Remembrall:
         return CHOOSING
 
     def start_after_restart(self, update, context):
-        var = RemembrallSettings.step_create(update, self.__database)
+        var = self.__remembral_settings.step_create(update)
         if var[0] == 3:
             return self.check_subscribe(update, context)
         elif var[0] == 1:
@@ -125,8 +124,6 @@ class Remembrall:
         self.__remembrall = remembrall
         updater = Updater(TELEGRAM_HTTP_API_TOKEN, use_context=True)
         dispatcher = updater.dispatcher
-
-
         self.__threads.add_datetime_for_dict_remind_after_restart(updater)
 
 
@@ -187,6 +184,10 @@ class Remembrall:
 
 
 if __name__ == '__main__':
-    # RemembrallSettings.first_settings_for_start_server()
-    remembrall = Remembrall()
+    database = DataBase.DataBase()
+    remembrallSettings = RemembrallSettings.RemembrallSettings(database)
+    remembrallSettings.first_settings_for_start_server()
+
+    remembrall = Remembrall(database, remembrallSettings)
     remembrall.main(remembrall)
+

@@ -3,13 +3,13 @@ import pymysql as pymysql
 
 class DataBase:
     def __init__(self):
-        self.__my_db_connector = pymysql.connect(
-            'localhost',
-            'root',
-            'Ambrasador83',
-            'remembrall_v2'
-        )
-        # self.__my_db_connector = None
+        # self.__my_db_connector = pymysql.connect(
+        #     'localhost',
+        #     'root',
+        #     'Ambrasador83',
+        #     'remembrall_v2'
+        # )
+        self.__my_db_connector = None
         self.__check_or_create_database = "CREATE DATABASE IF NOT EXISTS Remembrall_v2"
         self.__create_db_table_settings = "CREATE TABLE IF NOT EXISTS settings(" \
                                           "IdUser INT PRIMARY KEY," \
@@ -81,6 +81,7 @@ class DataBase:
         with mydb:
             __cur = mydb.cursor()
             __cur.execute(self.__check_or_create_database)
+            __cur.close()
         self.__my_db_connector = pymysql.connect(
             'localhost',
             'root',
@@ -100,7 +101,6 @@ class DataBase:
             __con.execute(self.__add_title, (user_id, title, '3'))
 
     def send_subscribe(self, user_id, subscribe):
-        print(user_id)
         with self.__my_db_connector:
             __con = self.__my_db_connector.cursor()
             __con.execute(self.__last_rem, user_id)
@@ -183,7 +183,6 @@ class DataBase:
             __con = self.__my_db_connector.cursor()
             __con.execute(self.__transfer_reminder, user_id)
             __id_reminder = __con.fetchone()
-            print('__id_mess ', __id_reminder)
             __con.execute(self.__finish_editing_reminder,  __id_reminder)
 
     def check_editing_reminder(self, user_id):
