@@ -4,9 +4,9 @@ import psycopg2
 class DataBase:
     def __init__(self):
         self.__my_db_connector = psycopg2.connect(
-            database="d8eqvvdm8p69eu",
-            user="hkzipoeeorjyvb",
-            password="4754955ede4922e86f25168022eabce737a988ba0bd57d31149cdef2f37e7871",
+            database="d5n0hp5vck5489",
+            user="mzwscamkxrwikt",
+            password="467bc6caf6758def91f1b9eb8beca16df1aaa7c48cc73773e8ef35ba332eb37a",
             host="ec2-46-137-84-173.eu-west-1.compute.amazonaws.com",
             port="5432"
         )
