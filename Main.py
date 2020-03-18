@@ -114,11 +114,14 @@ class Remembrall:
         return CHOOSING
 
     def start_after_restart(self, update, context):
-        var = self.__remembral_settings.step_create(update)
-        if var[0] == 3:
-            return self.check_subscribe(update, context)
-        elif var[0] == 1:
-            return self.check_time(update, context)
+        try:
+            var = self.__remembral_settings.step_create(update)
+            if var[0] == 3:
+                return self.check_subscribe(update, context)
+            elif var[0] == 1:
+                return self.check_time(update, context)
+        except Exception as exe:
+            pass
 
     def main(self, remembrall):
         self.__remembrall = remembrall
@@ -175,7 +178,10 @@ class Remembrall:
                     MessageHandler(Filters.text, self.check_time)
                 ],
             },
-            fallbacks=[CommandHandler('start', self.start),],
+            fallbacks=[
+                CommandHandler('start', self.start),
+
+            ],
         )
 
         dispatcher.add_handler(control_handler)

@@ -32,11 +32,14 @@ class Threads:
     def check_reminder(self):
         while True:
             for key in self.__start_send_reminder:
-                time = self.__database.allow_transfer_reminder(key)
-                if time[0] != 0:
-                    self.__start_send_reminder[key] = False
-                else:
-                    self.__start_send_reminder[key] = True
+                try:
+                    time = self.__database.allow_transfer_reminder(key)
+                    if time[0] != 0:
+                        self.__start_send_reminder[key] = False
+                    else:
+                        self.__start_send_reminder[key] = True
+                except Exception as exe:
+                    pass
             sleep(10)
 
 
@@ -48,15 +51,19 @@ class Threads:
 
 
     def add_datetime_for_dict_remind(self, user_id):
-        message = self.__database.select_one_reminder_where_editing_equal_true(user_id)
-        if message is None: #create
-            message = self.__database.select_last_remember(user_id)
-            self.__dict_reminder[message[0]] = (user_id, "{} {}".format(message[3], message[4]))
-            if user_id not in self.__start_send_reminder:
-                self.__start_send_reminder[user_id] = False
-            self.start_thread(message[0], user_id, message[1], message[2])
-        else:
-            self.__dict_reminder[message[0]] = (user_id, "{} {}".format(message[4], message[5]))
+        try:
+            message = self.__database.select_one_reminder_where_editing_equal_true(user_id)
+            if message is None: #create
+                message = self.__database.select_last_remember(user_id)
+                self.__dict_reminder[message[0]] = (user_id, "{} {}".format(message[3], message[4]))
+                if user_id not in self.__start_send_reminder:
+                    self.__start_send_reminder[user_id] = False
+                self.start_thread(message[0], user_id, message[1], message[2])
+            else:
+                self.__dict_reminder[message[0]] = (user_id, "{} {}".format(message[4], message[5]))
+
+        except Exception as exe:
+            pass
 
 
     def start_thread(self, message_id, user_id, title, subscribe):

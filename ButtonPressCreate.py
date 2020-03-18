@@ -102,21 +102,24 @@ class ButtonPressCreate:
 
 
     def check_user_time(self, update, context):
-        result = self.__checkUserData.check_time(update.message.text)
-        if result[0] == 0:
-            if self.__date is None:
-                self.__date = self.__database.last_date_remember(update.message.from_user.id)
-                dates = self.__date.split('-')
-                self.__date = '{}.{}.{}'.format(dates[2], dates[1], dates[0])
-            self.__time = result[1]
-            times = '{}:00'.format(result[1])
-            self.__update_rem = update
-            self.__context_rem = context
-            self.send_time(update.message.from_user.id, times)
-            return True
-        else:
-            self.send_mess(update, context, result[1])
-            return False
+        try:
+            result = self.__checkUserData.check_time(update.message.text)
+            if result[0] == 0:
+                if self.__date is None:
+                    self.__date = self.__database.last_date_remember(update.message.from_user.id)
+                    dates = self.__date.split('-')
+                    self.__date = '{}.{}.{}'.format(dates[2], dates[1], dates[0])
+                self.__time = result[1]
+                times = '{}:00'.format(result[1])
+                self.__update_rem = update
+                self.__context_rem = context
+                self.send_time(update.message.from_user.id, times)
+                return True
+            else:
+                self.send_mess(update, context, result[1])
+                return False
+        except Exception as exe:
+            pass
 
 
     def send_mess(self, update, context, mess):
@@ -126,29 +129,40 @@ class ButtonPressCreate:
         )
 
     def send_title(self, update):
-        self.__database.send_title(update.message.from_user.id, update.message.text)
-
+        try:
+            self.__database.send_title(update.message.from_user.id, update.message.text)
+        except Exception as exe:
+            pass
 
     def send_subscribe(self, update):
-        self.__database.send_subscribe(update.message.from_user.id, update.message.text)
+        try:
+            self.__database.send_subscribe(update.message.from_user.id, update.message.text)
+        except Exception as exe:
+            pass
 
 
     def send_date(self, user_id, dates):
-        editing = self.__database.check_editing_reminder(user_id)
-        if editing == 0:
-            self.__database.send_date(user_id, dates)
-        else:
-            self.__database.send_date_after_transfer(user_id, dates)
+        try:
+            editing = self.__database.check_editing_reminder(user_id)
+            if editing == 0:
+                self.__database.send_date(user_id, dates)
+            else:
+                self.__database.send_date_after_transfer(user_id, dates)
+        except Exception as exe:
+            pass
 
 
     def send_time(self, user_id, times):
-        editing = self.__database.check_editing_reminder(user_id)
-        if editing == 0:
-            self.__database.send_time(user_id, times)
-            self.__threads.add_datetime_for_dict_remind(user_id)
-        else:
-            self.__database.send_time_after_transfer(user_id, times)
-            self.__buttonPressTransfer.update_reminder_message(self.__update_rem, self.__context_rem, user_id)
+        try:
+            editing = self.__database.check_editing_reminder(user_id)
+            if editing == 0:
+                self.__database.send_time(user_id, times)
+                self.__threads.add_datetime_for_dict_remind(user_id)
+            else:
+                self.__database.send_time_after_transfer(user_id, times)
+                self.__buttonPressTransfer.update_reminder_message(self.__update_rem, self.__context_rem, user_id)
+        except Exception as exe:
+            pass
 
 
     def successful_create_rem(self, update, context):

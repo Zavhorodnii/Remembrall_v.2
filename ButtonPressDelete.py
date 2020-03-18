@@ -7,12 +7,15 @@ class ButtonPressDelete:
         self.__threads = threads
 
     def delete_reminder(self, update, context):
-        var = self.__database.select_repeat_message(update.callback_query.message.chat_id, update.callback_query.message.message_id)
-        self.__threads.del_reminder_from_dict_reminder(self.__database.elect_one_reminder_before_delete(
-            update.callback_query.message.chat_id, update.callback_query.message.message_id))
-        self.__database.delete_reminder(update.callback_query.message.chat_id, update.callback_query.message.message_id)
-        thread = Thread(target=self.delete, args=(update, context, var))
-        thread.start()
+        try:
+            var = self.__database.select_repeat_message(update.callback_query.message.chat_id, update.callback_query.message.message_id)
+            self.__threads.del_reminder_from_dict_reminder(self.__database.elect_one_reminder_before_delete(
+                update.callback_query.message.chat_id, update.callback_query.message.message_id))
+            self.__database.delete_reminder(update.callback_query.message.chat_id, update.callback_query.message.message_id)
+            thread = Thread(target=self.delete, args=(update, context, var))
+            thread.start()
+        except Exception as exe:
+            pass
 
 
     def delete(self, update, context, var):

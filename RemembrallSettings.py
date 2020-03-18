@@ -6,8 +6,14 @@ class RemembrallSettings:
         self.__database = database
 
     def first_settings_for_start_server(self):
-        self.__database.check_or_create_db()
+        try:
+            self.__database.check_or_create_db()
+        except Exception as exe:
+            pass
 
 
     def step_create(self, update):
-        return self.__database.step_create(update.message.from_user.id )
+        try:
+            return self.__database.step_create(update.message.from_user.id )
+        except Exception as exe:
+            pass
