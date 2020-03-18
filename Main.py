@@ -175,7 +175,7 @@ class Remembrall:
                     MessageHandler(Filters.text, self.check_time)
                 ],
             },
-            fallbacks=[],
+            fallbacks=[CommandHandler('start', self.start),],
         )
 
         dispatcher.add_handler(control_handler)

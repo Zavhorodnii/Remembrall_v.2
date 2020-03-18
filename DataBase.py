@@ -1,14 +1,13 @@
-import psycopg2 as psycopg2
-# import pymysql as pymysql
+import psycopg2
 
 
 class DataBase:
     def __init__(self):
         self.__my_db_connector = psycopg2.connect(
-            database="dcoo5sh19u83te",
-            user="qtalhygegwpjuo",
-            password="30b396cfa00480922c79cc2270a60b27dc7bd9eb9eb46de2aa933ec5a661c721",
-            host="ec2-54-247-78-30.eu-west-1.compute.amazonaws.com",
+            database="remembrall_v2",
+            user="postgres",
+            password="devoir",
+            host="localhost",
             port="5432"
         )
         self.__create_db_table_settings = "CREATE TABLE IF NOT EXISTS settings(" \

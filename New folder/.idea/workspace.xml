@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="33583fc4-65e4-437e-ad97-25daccc52971" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Remembrall_v.2" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="D:\Programming\python\Remembrall_v.2\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1YytZBbqkEbEiNG7V1MWi3RxVcY" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql&#10;postgresql" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration name="UserSettings" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Remembrall_v.2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="D:\Programming\python\Remembrall_v.2\UserSettings.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.UserSettings" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <option name="contentProportion" value="0.17694806" />
+          <treeState>
+            <expand>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:remembrall_v2@localhost" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+            </expand>
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="33583fc4-65e4-437e-ad97-25daccc52971" name="Default Changelist" comment="" />
+      <created>1583926714492</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1583926714492</updated>
+      <workItem from="1583926733792" duration="32000" />
+      <workItem from="1583926837868" duration="3724000" />
+      <workItem from="1583930585107" duration="312000" />
+      <workItem from="1583930908520" duration="832000" />
+      <workItem from="1583931804999" duration="58000" />
+      <workItem from="1583931884479" duration="1976000" />
+      <workItem from="1583936077388" duration="1237000" />
+      <workItem from="1583958909870" duration="111567000" />
+      <workItem from="1584288872593" duration="51370000" />
+      <workItem from="1584375243121" duration="63717000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/.." />
+    </ignored-roots>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="288" y="36" key="#SQL_Dialects" timestamp="1583961919405">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="288" y="36" key="#SQL_Dialects/0.0.1366.738@0.0.1366.738" timestamp="1583961919405" />
+    <state x="1842" y="199" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584527669604">
+      <screen x="1366" y="0" width="1920" height="1050" />
+    </state>
+    <state x="1598" y="156" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.738/1366.0.1280.994@1366.0.1280.994" timestamp="1583928399644" />
+    <state x="1842" y="199" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.738/1366.0.1920.1050@1366.0.1920.1050" timestamp="1584527669604" />
+    <state x="248" y="57" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.738@0.0.1366.738" timestamp="1584021597206" />
+    <state x="2089" y="316" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1584543533227">
+      <screen x="1366" y="0" width="1920" height="1050" />
+    </state>
+    <state x="2089" y="316" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.738/1366.0.1920.1050@1366.0.1920.1050" timestamp="1584543533227" />
+    <state x="1787" y="277" key="FileChooserDialogImpl" timestamp="1583936275513">
+      <screen x="1366" y="0" width="1280" height="994" />
+    </state>
+    <state x="1787" y="277" key="FileChooserDialogImpl/0.0.1366.738/1366.0.1280.994@1366.0.1280.994" timestamp="1583936275513" />
+    <state width="1877" height="253" key="GridCell.Tab.0.bottom" timestamp="1584550653463">
+      <screen x="1366" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="253" key="GridCell.Tab.0.bottom/0.0.1366.738/1366.0.1920.1050@1366.0.1920.1050" timestamp="1584550653463" />
+    <state width="1093" height="206" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1584036411328" />
+    <state width="1877" height="253" key="GridCell.Tab.0.center" timestamp="1584550653462">
+      <screen x="1366" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="253" key="GridCell.Tab.0.center/0.0.1366.738/1366.0.1920.1050@1366.0.1920.1050" timestamp="1584550653462" />
+    <state width="1093" height="206" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1584036411327" />
+    <state width="1877" height="253" key="GridCell.Tab.0.left" timestamp="1584550653462">
+      <screen x="1366" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="253" key="GridCell.Tab.0.left/0.0.1366.738/1366.0.1920.1050@1366.0.1920.1050" timestamp="1584550653462" />
+    <state width="1093" height="206" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1584036411327" />
+    <state width="1877" height="253" key="GridCell.Tab.0.right" timestamp="1584550653462">
+      <screen x="1366" y="0" width="1920" height="1050" />
+    </state>
+    <state width="1877" height="253" key="GridCell.Tab.0.right/0.0.1366.738/1366.0.1920.1050@1366.0.1920.1050" timestamp="1584550653462" />
+    <state width="1093" height="206" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1584036411328" />
+    <state x="1577" y="36" key="SettingsEditor" timestamp="1584544128739">
+      <screen x="1366" y="0" width="1920" height="1050" />
+    </state>
+    <state x="1507" y="140" key="SettingsEditor/0.0.1366.738/1366.0.1280.994@1366.0.1280.994" timestamp="1583936462449" />
+    <state x="1577" y="36" key="SettingsEditor/0.0.1366.738/1366.0.1920.1050@1366.0.1920.1050" timestamp="1584544128739" />
+    <state x="150" y="25" key="SettingsEditor/0.0.1366.738@0.0.1366.738" timestamp="1584020501081" />
+    <state x="1989" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1584283473193">
+      <screen x="1366" y="0" width="1920" height="1050" />
+    </state>
+    <state x="1989" y="227" width="672" height="678" key="search.everywhere.popup/0.0.1366.738/1366.0.1920.1050@1366.0.1920.1050" timestamp="1584283473193" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Threads.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Remembrall_v_2$Settings.coverage" NAME="Settings Coverage Results" MODIFIED="1584012138165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Remembrall_v_2$Main.coverage" NAME="Main Coverage Results" MODIFIED="1584539036459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>
