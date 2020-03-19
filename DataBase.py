@@ -4,10 +4,10 @@ import psycopg2
 class DataBase:
     def __init__(self):
         self.__my_db_connector = psycopg2.connect(
-            database="d8l9h0qmkald8",
-            user="uvxfdfenaudrwt",
-            password="6f61ec7733d5453b42fc114ba960da941aac544e37609ceb68225b4e1ea79f01",
-            host="ec2-54-246-90-10.eu-west-1.compute.amazonaws.com",
+            database="d8c75t5ve1fr0k",
+            user="frcypbkbduembd",
+            password="a7ae4b986fbeb77ea344072ace1ae7a53ebe3baed16dc5bc6ac52a0268b151d3",
+            host="ec2-54-247-169-129.eu-west-1.compute.amazonaws.com",
             port="5432"
         )
         self.__create_db_table_settings = "CREATE TABLE IF NOT EXISTS settings(" \

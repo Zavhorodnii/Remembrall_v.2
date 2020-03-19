@@ -1,3 +1,4 @@
+from datetime import datetime
 from time import sleep
 
 import Buttons
@@ -21,8 +22,8 @@ class ButtonPressShow:
                     correct_date = str(remember[3]).split('-')
                     call_reminder = context.bot.send_message(
                         update.effective_chat.id,
-                        text="{}\n{}\nДата {}.{}.{}\nВремя {}".format(remember[1], remember[2], correct_date[2], correct_date[1],
-                                                                      correct_date[0], remember[4]),
+                        text="{}\n{}\nДата {}.{}.{}\nВремя {}\n time in server: {}".format(remember[1], remember[2], correct_date[2], correct_date[1],
+                                                                      correct_date[0], remember[4], datetime.now()),
                         reply_markup=self.__buttons.button_control_mess()
                     )
                     self.database.add_id_reminder(update.effective_chat.id, call_reminder.message_id, remember[0])
