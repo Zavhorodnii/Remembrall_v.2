@@ -37,6 +37,7 @@ class Remembrall:
         self.__remembrall = None
 
     def start(self, update, context):
+        self.__buttonPressTransfer.cancel_update_date(update, context)
         self.__commandStart.start(update, context)
         return CHOOSING
 
