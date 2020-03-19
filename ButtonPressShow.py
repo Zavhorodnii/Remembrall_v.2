@@ -1,6 +1,8 @@
 from datetime import datetime
 from time import sleep
 
+import pytz
+
 import Buttons
 
 
@@ -22,8 +24,8 @@ class ButtonPressShow:
                     correct_date = str(remember[3]).split('-')
                     call_reminder = context.bot.send_message(
                         update.effective_chat.id,
-                        text="{}\n{}\nДата {}.{}.{}\nВремя {}\n time in server: {}".format(remember[1], remember[2], correct_date[2], correct_date[1],
-                                                                      correct_date[0], remember[4], datetime.now()),
+                        text="{}\n{}\nДата {}.{}.{}\nВремя {}\n utcnow: {} \ntime in server: {} \ntzinfo: {}".format(remember[1], remember[2], correct_date[2], correct_date[1],
+                                                                      correct_date[0], remember[4], datetime.utcnow(), datetime.now(), datetime.utcnow().replace(tzinfo=pytz.utc)),
                         reply_markup=self.__buttons.button_control_mess()
                     )
                     self.database.add_id_reminder(update.effective_chat.id, call_reminder.message_id, remember[0])
