@@ -41,6 +41,7 @@ class Threads:
                         self.__start_send_reminder[key] = True
                 except Exception as exe:
                     pass
+            # print('self.__start_send_reminder ', self.__start_send_reminder)
             sleep(10)
 
 
@@ -80,9 +81,11 @@ class Threads:
                 sleep(15)
                 continue
 
-            date = datetime.strptime(self.__dict_reminder[message_id][1], "%Y-%m-%d %H:%M:%S")
             local_timezone = tzlocal.get_localzone()
-            user_time = date.astimezone(local_timezone)
+            local_timezone_2 = pytz.timezone("Europe/Kiev")
+            date = datetime.strptime(self.__dict_reminder[message_id][1], "%Y-%m-%d %H:%M:%S")
+            user_t = date.astimezone(local_timezone_2)
+            user_time = user_t.astimezone(local_timezone)
 
             now = datetime.now()
             local_time = now.astimezone(local_timezone)

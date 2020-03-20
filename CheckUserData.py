@@ -86,9 +86,12 @@ class CheckUserData:
             user_date_time = datetime.strptime(str(self.__save_date) + " " + str(hour) + ':' + str(minute) + ':' + '00',
                                                "%Y-%m-%d %H:%M:%S")
 
-
             local_timezone = tzlocal.get_localzone()
-            user_time = user_date_time.astimezone(local_timezone)
+            local_timezone_2 = pytz.timezone("Europe/Kiev")
+
+            user_t = user_date_time.astimezone(local_timezone_2)
+            user_time = user_t.astimezone(local_timezone)
+
 
             now = datetime.now()
             local_time = now.astimezone(local_timezone)
