@@ -87,18 +87,8 @@ class Threads:
             local_timezone = tzlocal.get_localzone()
             local_timezone_2 = pytz.timezone("Europe/Kiev")
             date = datetime.strptime(self.__dict_reminder[message_id][1], "%Y-%m-%d %H:%M:%S")
-            user_t = date.astimezone(local_timezone_2)
-            user_time = user_t.astimezone(local_timezone)
-            #-------------
-
-            local_timezone_2 = pytz.timezone("Europe/Kiev")
-            local_timezone = tzlocal.get_localzone()  # pytz-timezone
-            now = datetime.now()
-            local_time_ = date.astimezone(local_timezone_2)
-            local_time_2 = local_time_.astimezone(local_timezone)
-
-            #++++++++++++
-
+            user_time_0 = date.replace(tzinfo=local_timezone_2)
+            user_time = user_time_0.astimezone(local_timezone)
 
 
             now = datetime.now()
@@ -107,8 +97,8 @@ class Threads:
             self.__updater.bot.send_message(
                 user_id,
                 text="date {} \nlocal_timezone_2 {} \nlocal_timezone {}"
-                     "\nnow {} \nuser_t {} \nuser_time {} \nlocal_time {}".format(date, local_timezone_2, local_timezone, now,
-                                                                                  user_t, user_time, local_time)
+                     "\nnow {} \nuser_time_0 {} \nuser_time {} \nlocal_time {}".format(date, local_timezone_2, local_timezone, now,
+                                                                                  user_time_0, user_time, local_time)
             )
 
             if user_time <= local_time:

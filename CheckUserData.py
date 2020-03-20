@@ -88,9 +88,8 @@ class CheckUserData:
 
             local_timezone = tzlocal.get_localzone()
             local_timezone_2 = pytz.timezone("Europe/Kiev")
-
-            user_t = user_date_time.astimezone(local_timezone_2)
-            user_time = user_t.astimezone(local_timezone)
+            user_time_0 = user_date_time.replace(tzinfo=local_timezone_2)
+            user_time = user_time_0.astimezone(local_timezone)
 
 
             now = datetime.now()
