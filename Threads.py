@@ -1,7 +1,8 @@
 from datetime import datetime
 from threading import Thread
 from time import sleep
-
+import pytz
+import tzlocal
 
 
 class Threads:
@@ -45,7 +46,7 @@ class Threads:
 
 
     def del_reminder_from_dict_reminder(self, message_id):
-        if message_id not in self.__dict_reminder:
+        if message_id[0] not in self.__dict_reminder:
             return
         del self.__dict_reminder[message_id[0]]
 
@@ -78,8 +79,14 @@ class Threads:
             if not self.__start_send_reminder[user_id]:
                 sleep(15)
                 continue
+
             date = datetime.strptime(self.__dict_reminder[message_id][1], "%Y-%m-%d %H:%M:%S")
-            if date <= datetime.now():
+            local_timezone = tzlocal.get_localzone()
+            user_time = date.astimezone(local_timezone)
+
+            now = datetime.now(pytz.utc)
+            local_time = now.astimezone(local_timezone)
+            if user_time <= local_time:
                 date = self.__dict_reminder[message_id][1].split(' ')
                 correct_date = str(date[0]).split('-')
                 call_reminder = self.__updater.bot.send_message(

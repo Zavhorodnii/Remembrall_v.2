@@ -3,6 +3,9 @@ import re
 
 from datetime import datetime
 
+import pytz
+import tzlocal
+
 
 class CheckUserData:
     def __init__(self):
@@ -79,15 +82,20 @@ class CheckUserData:
                 raise Exception('Неверный формат ввода часов')
             if minute < 0 or minute > 59:
                 raise Exception('Неверный формат ввода минут')
-            user_time = datetime.strptime(str(hour) + ':' + str(minute) + ':' + '00', "%H:%M:%S").time()
-            user_date = datetime.strptime(str(self.__save_date), '%Y-%m-%d').date()
 
-            now_time = datetime.now().time()
-            now_date = datetime.now().date()
+            user_date_time = datetime.strptime(str(self.__save_date) + " " + str(hour) + ':' + str(minute) + ':' + '00',
+                                               "%Y-%m-%d %H:%M:%S")
 
-            if user_date == now_date:
-                if user_time <= now_time:
-                    raise Exception('Время прошло')
+
+            local_timezone = tzlocal.get_localzone()
+            user_time = user_date_time.astimezone(local_timezone)
+
+            now = datetime.now(pytz.utc)
+            local_time = now.astimezone(local_timezone)
+
+
+            if user_time <= local_time:
+                raise Exception('Время прошло')
 
             if len(str(hour)) < 2:
                 hour = "0{}".format(hour)
