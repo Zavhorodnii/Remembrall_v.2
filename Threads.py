@@ -111,6 +111,6 @@ class Threads:
                     reply_markup=self.__buttons.button_control_mess()
                 )
                 self.__database.add_id_reminder(user_id, call_reminder.message_id, message_id)
-                sleep(20)
+                sleep(300)
             else:
                 sleep(10)
