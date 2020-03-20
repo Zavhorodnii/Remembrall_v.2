@@ -86,6 +86,13 @@ class Threads:
 
             now = datetime.now(pytz.utc)
             local_time = now.astimezone(local_timezone)
+
+            self.__updater.bot.send_message(
+                user_id,
+                text="date {} \nlocal_timezone {} \nuser_time {} \nlocal_time {}".format(date, local_timezone,
+                                                                                         user_time, local_time)
+            )
+
             if user_time <= local_time:
                 date = self.__dict_reminder[message_id][1].split(' ')
                 correct_date = str(date[0]).split('-')
@@ -96,6 +103,6 @@ class Threads:
                     reply_markup=self.__buttons.button_control_mess()
                 )
                 self.__database.add_id_reminder(user_id, call_reminder.message_id, message_id)
-                sleep(300)
+                sleep(20)
             else:
                 sleep(10)
