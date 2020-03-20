@@ -84,7 +84,7 @@ class Threads:
             local_timezone = tzlocal.get_localzone()
             user_time = date.astimezone(local_timezone)
 
-            now = datetime.now(pytz.utc)
+            now = datetime.now()
             local_time = now.astimezone(local_timezone)
 
             self.__updater.bot.send_message(
