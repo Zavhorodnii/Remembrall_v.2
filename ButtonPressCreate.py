@@ -170,6 +170,6 @@ class ButtonPressCreate:
     def successful_create_rem(self, update, context):
         context.bot.send_message(
             update.effective_chat.id,
-            text="Напоминание появится {} в {}\n {}".format(self.__date, self.__time, datetime.now()),
+            text="Напоминание появится {} в {}".format(self.__date, self.__time),
             reply_markup=self.__buttons.main_button()
         )
