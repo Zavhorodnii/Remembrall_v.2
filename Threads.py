@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from threading import Thread
 from time import sleep
 import pytz
@@ -94,13 +94,13 @@ class Threads:
             now = datetime.now()
             local_time = now.astimezone(local_timezone)
 
-            self.__updater.bot.send_message(
-                user_id,
-                text="date {} \nlocal_timezone_2 {} \nlocal_timezone {}"
-                     "\nnow {} \nuser_time_0 {} \nuser_time {} \nlocal_time {}".format(date, local_timezone_2, local_timezone, now,
-                                                                                  user_time_0, user_time, local_time)
-            )
-
+            # self.__updater.bot.send_message(
+            #     user_id,
+            #     text="date {} \nlocal_timezone_2 {} \nlocal_timezone {}"
+            #          "\nnow {} \nuser_time_0 {} \nuser_time {} \nlocal_time {}".format(date, local_timezone_2, local_timezone, now,
+            #                                                                       user_time_0, user_time, local_time)
+            # )
+            local_time = local_time - timedelta(minutes=2)
             if user_time <= local_time:
                 date = self.__dict_reminder[message_id][1].split(' ')
                 correct_date = str(date[0]).split('-')

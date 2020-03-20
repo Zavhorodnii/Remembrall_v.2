@@ -105,10 +105,10 @@ class ButtonPressCreate:
 
     def check_user_time(self, update, context):
         try:
-            result = self.__checkUserData.check_time(update.message.text)
+            self.__date = self.__database.last_date_remember(update.message.from_user.id)
+            result = self.__checkUserData.check_time(update.message.text, self.__date)
             if result[0] == 0:
                 if self.__date is None:
-                    self.__date = self.__database.last_date_remember(update.message.from_user.id)
                     dates = self.__date.split('-')
                     self.__date = '{}.{}.{}'.format(dates[2], dates[1], dates[0])
                 self.__time = result[1]

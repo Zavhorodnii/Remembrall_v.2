@@ -1,7 +1,7 @@
 from calendar import monthrange
 import re
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytz
 import tzlocal
@@ -61,7 +61,7 @@ class CheckUserData:
             return 1, str(ex)
 
 
-    def check_time(self, time_2):
+    def check_time(self, time_2, last_date):
         try:
             check = list()
             buff = re.split(r'(\d{,2})\D+', time_2)
@@ -83,7 +83,7 @@ class CheckUserData:
             if minute < 0 or minute > 59:
                 raise Exception('Неверный формат ввода минут')
 
-            user_date_time = datetime.strptime(str(self.__save_date) + " " + str(hour) + ':' + str(minute) + ':' + '00',
+            user_date_time = datetime.strptime(last_date + " " + str(hour) + ':' + str(minute) + ':' + '00',
                                                "%Y-%m-%d %H:%M:%S")
 
             local_timezone = tzlocal.get_localzone()
@@ -94,6 +94,8 @@ class CheckUserData:
 
             now = datetime.now()
             local_time = now.astimezone(local_timezone)
+
+            local_time = local_time - timedelta(minutes=2)
 
 
             if user_time <= local_time:
